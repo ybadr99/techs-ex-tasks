@@ -41,14 +41,19 @@ const generateUser = (user) => {
   });
 
   const editBtn = document.createElement("a");
+
   editBtn.textContent = "edit";
   editBtn.className = "button btn btn-primary";
-
+  //update users and set values to form
   editBtn.addEventListener("click", (e) => {
     const singleUser = users.find((u) => u.id === user.id);
     document.querySelector("#name").value = singleUser.name;
     document.querySelector("#age").value = singleUser.age;
     document.querySelector("#id").value = singleUser.id;
+
+    singleUser.status === "active"
+      ? (document.querySelector("#status").checked = true)
+      : (document.querySelector("#status").checked = false);
     document.querySelector("#formBtn").textContent = "update";
   });
 
@@ -60,12 +65,15 @@ const generateUser = (user) => {
 
   const nameEl = document.createElement("h4");
   const ageEl = document.createElement("span");
+  const statusEl = document.createElement("p");
 
   nameEl.textContent = user.name;
   ageEl.textContent = user.age;
+  statusEl.textContent = user.status;
 
   newUser.appendChild(nameEl);
   newUser.appendChild(ageEl);
+  newUser.appendChild(statusEl);
 
   return container;
 };

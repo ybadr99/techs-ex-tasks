@@ -1,14 +1,13 @@
 const formEl = document.querySelector("#form");
-const heads = ["name", "age"];
-
-const users = getUsers();
-console.log(users);
-render();
 const formBtn = document.querySelector("#formBtn");
-
 const status = document.querySelector("#status").checked
   ? "active"
   : "inactive";
+const heads = ["name", "age"];
+
+const users = getUsers();
+
+render();
 
 formEl.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -40,5 +39,3 @@ formEl.addEventListener("submit", (e) => {
     formBtn.textContent = "submit";
   }
 });
-
-// console.log(users);

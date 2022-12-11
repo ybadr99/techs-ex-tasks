@@ -1,0 +1,22 @@
+<%- include('./inc/header.ejs') %>
+
+<section class="container">
+  <% if(books.length > 0) { for (const book of books) { %>
+
+  <div class="card m-4" style="width: 18rem">
+    <!-- <img class="card-img-top" src="..." alt="Card image cap" /> -->
+    <div class="card-body">
+      <h5 class="card-title"><%= book.title %></h5>
+      <p class="card-text"><%= book.desc %></p>
+
+      <div class="text-center">
+        <a href="/edit/<%= book.id %>" class="btn btn-primary">Edit</a>
+        <a href="/delete/<%= book.id %>" class="btn btn-danger">Delete</a>
+      </div>
+    </div>
+  </div>
+
+  <% } } else { %>
+  <h1>there is no books</h1>
+  <% } %>
+</section>

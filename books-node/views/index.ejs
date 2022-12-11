@@ -1,13 +1,29 @@
 <%- include('./inc/header.ejs') %>
 
-<section class="container">
+<section class="container ">
+
+  <form action='search' method="post">
+    <div class="m-4 col-4">
+      <input
+      class="form-control"
+      type="text"
+      name="title"
+      placeholder="search by title"
+      />
+    <button class="btn btn-success mt-3">search</button>
+    </div>
+  </form>
+
   <% if(books.length > 0) { for (const book of books) { %>
 
   <div class="card m-4" style="width: 18rem">
     <!-- <img class="card-img-top" src="..." alt="Card image cap" /> -->
     <div class="card-body">
       <h5 class="card-title"><%= book.title %></h5>
+      <h6 class="card-subtitle mb-2 text-muted"><%= book.author %></h6>
       <p class="card-text"><%= book.desc %></p>
+      <p class="card-text"><%= book.category %></p>
+      <p class="blockquote-footer"><%= book.pages %> </p>
 
       <div class="text-center">
         <a href="/edit/<%= book.id %>" class="btn btn-primary">Edit</a>

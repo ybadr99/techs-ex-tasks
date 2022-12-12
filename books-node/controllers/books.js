@@ -1,11 +1,16 @@
 const { getData, setData, getId } = require("../util/util");
 
+const { getDb } = require("../util/db");
+const { ObjectId } = require("mongodb");
+
 //import models
+const Book = require("../models/book");
 
 //get all books
-exports.getAllBooks = (req, res) => {
-  const books = getData();
-
+exports.getAllBooks = async (req, res) => {
+  const db = getDb();
+  const books = await db.collection("books").find().toArray();
+  // console.log(books);
   res.render("index", {
     pageTitle: "Home",
     books: books,
@@ -17,52 +22,64 @@ exports.getAddBook = (req, res) => {
 };
 
 //post add book
-exports.postAddBook = (req, res) => {
-  const books = getData();
-  const book = { id: Date.now().toString(), ...req.body };
-  books.push(book);
+exports.postAddBook = async (req, res) => {
+  try {
+    const book = { id: Date.now().toString(), ...req.body };
+    const db = getDb();
 
-  setData(books);
-  console.log(books);
-  res.redirect("/");
+    await db.collection("books").insertOne(book);
+    res.redirect("/");
+  } catch (error) {
+    throw error;
+  }
 };
 // get edit book
-exports.getEditBook = (req, res) => {
-  const books = getData();
-  const book = books.find((book) => book.id === req.params.id);
-  res.render("editBook", { pageTitle: "Edit Book", book: book, num:"22" });
+exports.getEditBook = async (req, res) => {
+  const db = getDb();
+  const book = await db
+    .collection("books")
+    .findOne({ _id: new ObjectId(req.params.id) });
+  res.render("editBook", { pageTitle: "Edit Book", book: book });
 };
 // post edit book
-exports.postEditBook = (req, res) => {
-  const books = getData();
-  const bookIndex = getId(books, req.body.id);
-  console.log(bookIndex)
-  if (bookIndex != -1) {
-    const book = {...req.body}
-    books[bookIndex] = book
-    setData(books)
-    console.log(book,books)
-  }
-  res.redirect('/')
+exports.postEditBook = async (req, res) => {
+  try {
+    const db = getDb();
+    await db
+      .collection("books")
+      .updateOne({ _id: new ObjectId(req.body.id) }, { $set: req.body });
 
+    res.redirect("/");
+  } catch (error) {
+    throw error;
+  }
 };
 
 //remove book
-exports.deleteBook = (req, res) => {
-  const books = getData();
-  const bookIndex = getId(books, req.params.id);
-
-  books.splice(bookIndex, 1);
-  setData(books);
-  res.redirect("/");
+exports.deleteBook = async (req, res) => {
+  try {
+    const db = getDb();
+    await db
+      .collection("books")
+      .deleteOne({ _id: new ObjectId(req.params.id) });
+    res.redirect("/");
+  } catch (e) {
+    throw e;
+  }
 };
 //search book
-exports.searchByName = (req,res) => {
-  console.log('search......')
-  // console.log(req)
-  const books = getData();
-  const sTitle = req.body.title;
-  const b = books.find(b=>b.title = sTitle)
+exports.searchByName = (req, res) => {
+  console.log("search......");
+};
 
-  res.render("show", { pageTitle: "!!", book: b });
-}
+exports.singleBook = async (req, res) => {
+  try {
+    const db = getDb();
+    const book = await db
+      .collection("books")
+      .findOne({ _id: new ObjectId(req.params.id) });
+    res.render("book", { pageTitle: "Single Book", book: book });
+  } catch (error) {
+    throw error;
+  }
+};

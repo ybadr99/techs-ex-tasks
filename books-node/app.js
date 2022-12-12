@@ -1,3 +1,4 @@
+const { mongoConnect } = require("./util/db");
 const path = require("path");
 const express = require("express");
 
@@ -19,4 +20,7 @@ const booksRoutes = require("./routes/router");
 app.use(booksRoutes);
 
 // serve
-app.listen(3002, () => console.log("listening on http://localhost:3002/"));
+mongoConnect(() => {
+  console.log("connected!");
+  app.listen(3002, () => console.log("listening on http://localhost:3002/"));
+});

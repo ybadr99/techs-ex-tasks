@@ -8,6 +8,8 @@ const booksController = require("../controllers/books");
 
 router.get("/", booksController.getAllBooks);
 
+router.get("/book/:id", booksController.singleBook);
+
 router.get("/add-book", booksController.getAddBook);
 router.post("/add-book", booksController.postAddBook);
 
@@ -17,7 +19,6 @@ router.post("/edit/", booksController.postEditBook);
 router.get("/delete/:id", booksController.deleteBook);
 
 router.post("/search/", booksController.searchByName);
-
 
 // exports
 module.exports = router;
